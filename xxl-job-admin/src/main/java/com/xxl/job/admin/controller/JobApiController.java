@@ -6,6 +6,7 @@ import com.xxl.job.core.biz.AdminBiz;
 import com.xxl.job.core.biz.model.HandleCallbackParam;
 import com.xxl.job.core.biz.model.RegistryParam;
 import com.xxl.job.core.biz.model.ReturnT;
+import com.xxl.job.core.biz.model.XxlJobInfoParam;
 import com.xxl.job.core.util.GsonTool;
 import com.xxl.job.core.util.XxlJobRemotingUtil;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 /**
  * JobApiController 类负责处理与作业（Job）相关的API请求。
@@ -75,6 +77,29 @@ public class JobApiController {
             case "registryRemove": {
                 RegistryParam registryParam = GsonTool.fromJson(data, RegistryParam.class);
                 return adminBiz.registryRemove(registryParam);
+            }
+            case "addXxlJob": {
+                XxlJobInfoParam jobInfo = GsonTool.fromJson(data, XxlJobInfoParam.class);
+                return adminBiz.addXxlJob(jobInfo);
+            }
+            case "updateXxlJob": {
+                XxlJobInfoParam jobInfo = GsonTool.fromJson(data, XxlJobInfoParam.class);
+                return adminBiz.updateXxlJob(jobInfo);
+            }
+            case "removeXxlJob": {
+                Map<String, Object> dataMap = GsonTool.fromJsonMap(data, String.class, Object.class);
+                int id = (int) dataMap.get("id");
+                return adminBiz.removeXxlJob(id);
+            }
+            case "startXxlJob": {
+                Map<String, Object> dataMap = GsonTool.fromJsonMap(data, String.class, Object.class);
+                int id = (int) dataMap.get("id");
+                return adminBiz.startXxlJob(id);
+            }
+            case "stopXxlJob": {
+                Map<String, Object> dataMap = GsonTool.fromJsonMap(data, String.class, Object.class);
+                int id = (int) dataMap.get("id");
+                return adminBiz.stopXxlJob(id);
             }
             default:
                 return new ReturnT<String>(ReturnT.FAIL_CODE, "invalid request, uri-mapping(" + uri + ") not found.");
